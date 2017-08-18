@@ -11,7 +11,7 @@ resource "google_container_cluster" "gke" {
   name               = "${var.gke_name}"
   zone               = "${var.gke_zone}"
   initial_node_count = "${var.gke_nr_of_nodes}"
- 
+  node_version       = "${var.gke_version}"
   node_config {
     machine_type = "${var.gke_type_of_nodes}"
     oauth_scopes = [
