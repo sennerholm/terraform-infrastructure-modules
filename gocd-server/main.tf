@@ -1,10 +1,10 @@
 data "terraform_remote_state" "gke" {
   backend = "gcs"
   config {
-    bucket = "mikan-terraform-project6"
+    bucket = "${var.google_project}"
     path = "europe-west1/prod/gke/terraform.tfstate"    
-    project="mikan-terraform-project6" 
-    credentials = "/home/mikan/.config/gcloud/terraform-project6.json"
+    project="${var.google_project}" 
+    credentials = "${var.google_keyfile}"
   }
 }
 
