@@ -13,3 +13,7 @@ variable "namespace" {
   description = "The namespace the configuration that should be applied to"
   default ="default"
 }
+
+variable "depends_on" {
+  description = "Concat a string of all resources it depends on"
+}

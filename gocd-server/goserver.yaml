@@ -45,5 +45,5 @@ spec:
             fsType: ext4
         - name: prod-go-data-db
           gcePersistentDisk:
-            pdName: production-go-data-db
+            pdName: prod-go-data-db
             fsType: ext4

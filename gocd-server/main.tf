@@ -27,6 +27,7 @@ module "kubernetes_goserver" {
   namespace 	= "${kubernetes_namespace.gocd-server.metadata.0.name}"
   k8sconf    	= "${data.terraform_remote_state.gke.k8sconf}"
   configuration = "${file("${path.module}/goserver.yaml")}"
+  depends_on	= "${google_compute_disk.prod_go_data.users} ${google_compute_disk.prod_go_datadb.users} "
 }
 
 resource "kubernetes_service" "gocd-server" {
