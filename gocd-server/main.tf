@@ -19,20 +19,14 @@ resource "google_compute_disk" "prod_go_datadb" {
   size  = "10"
 }
 
-// We need an initcontainer to fill the go_data disk with bootstrap config. 
-// Otherwize we should have declared the pod as a kubectl pod
-// Now we doesn't handle delete any good...
-resource "null_resource" "gocd-pod-with-init" {
-  # Changes to any instance of the cluster requires re-provisioning
-  triggers {
-    go_data = "${google_compute_disk.prod_go_data.self_link}"
-  }
-  depends_on = ["kubernetes_namespace.gocd-server",
-  				"google_compute_disk.prod_go_data",
-  				"google_compute_disk.prod_go_datadb"]
-  provisioner "local-exec" {
-    command = "kubectl apply --namespace gocd-server -f ${path.module}/goserver.yaml"
-  }
+
+// Change to the template language later
+// https://www.terraform.io/docs/providers/template/d/file.html
+module "kubernetes_goserver" {
+  source        = "../kubernetes_beta"
+  namespace 	= "${kubernetes_namespace.gocd-server.metadata.0.name}"
+  k8sconf    	= "${data.terraform_remote_state.gke.k8sconf}"
+  configuration = "${file("${path.module}/goserver.yaml")}"
 }
 
 resource "kubernetes_service" "gocd-server" {
