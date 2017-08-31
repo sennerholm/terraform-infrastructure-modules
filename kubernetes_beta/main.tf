@@ -25,6 +25,8 @@ resource "null_resource" "kubernetes_resource" {
   provisioner "local-exec" {
     command = "rm ${path.module}/client.key ${path.module}/client.pem ${path.module}/ca.pem"
   }
+
+  /* Destroying is not always good, for example when creating a resource wish take care of the upgrade with apply
   // We need the files also when destroying, but I haven't find out the syntax for "when" if it's possible to 
   // declare them on both "destroy" and default
   provisioner "local-exec" {
@@ -52,4 +54,5 @@ resource "null_resource" "kubernetes_resource" {
     command = "rm ${path.module}/client.key ${path.module}/client.pem ${path.module}/ca.pem"
     when    = "destroy"
   }
+  */
 }

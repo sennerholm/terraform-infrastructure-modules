@@ -16,4 +16,5 @@ variable "namespace" {
 
 variable "depends_on" {
   description = "Concat a string of all resources it depends on"
+  default = ""
 }
