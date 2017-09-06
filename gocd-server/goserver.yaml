@@ -15,7 +15,7 @@ spec:
         name: gocd-server
     spec:
       containers:
-      - image: gocd/gocd-server:v17.8.0
+      - image: sennerholm/gocd-server:v17.9.0
         imagePullPolicy: Always
         name: gocd-server
         ports:
