@@ -11,7 +11,7 @@ spec:
         app: gocd-agent
     spec:
       containers:
-      - image: sennerholm/gocd-agent-gcloud:v17.9.2
+      - image: sennerholm/gocd-agent-gcloud:v17.9.3
         name: gocd-agent
         imagePullPolicy: Always
         securityContext:
