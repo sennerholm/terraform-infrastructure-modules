@@ -19,21 +19,10 @@ resource "google_compute_disk" "prod_go_datadb" {
   size  = "10"
 }
 
-
-// Change to the template language later
-// https://www.terraform.io/docs/providers/template/d/file.html
-module "kubernetes_goserver" {
-  source        = "../kubernetes_beta"
-  namespace 	= "${kubernetes_namespace.gocd-server.metadata.0.name}"
-  k8sconf    	= "${data.terraform_remote_state.gke.k8sconf}"
-  configuration = "${file("${path.module}/goserver.yaml")}"
-  depends_on	= "${google_compute_disk.prod_go_data.users} ${google_compute_disk.prod_go_datadb.users} "
-}
-
 resource "kubernetes_service" "gocd-server" {
   metadata {
     name = "gocd-server"
-    namespace = "gocd-server"
+    namespace = "${kubernetes_namespace.gocd-server.metadata.0.name}"
     
   }
   spec {
@@ -48,4 +37,39 @@ resource "kubernetes_service" "gocd-server" {
     type = "LoadBalancer"
   }
 }
+
+
+// Create ssh key
+// TODO:  Precreated 
+// 
+
+// Create secret with ssh keys
+resource "kubernetes_secret" "ssh_key" {
+  metadata {
+    name = "ssh-key"
+    namespace = "${kubernetes_namespace.gocd-server.metadata.0.name}"
+  }
+
+  data {
+    id_rsa = "${file("${var.ssh_key_path}/id_rsa")}"
+    id_rsa.pub  = "${file("${var.ssh_key_path}/id_rsa.pub")}"
+  }
+}
+
+
+// Mount in ssh-server
+
+// Change to the template language later
+// https://www.terraform.io/docs/providers/template/d/file.html
+module "kubernetes_goserver" {
+  source        = "../kubernetes_beta"
+  namespace 	= "${kubernetes_namespace.gocd-server.metadata.0.name}"
+  k8sconf    	= "${data.terraform_remote_state.gke.k8sconf}"
+  configuration = "${file("${path.module}/goserver.yaml")}"
+  depends_on	= "${google_compute_disk.prod_go_data.users} ${google_compute_disk.prod_go_datadb.users} ${kubernetes_secret.ssh_key.generation} "
+}
+
+
+
+
 

@@ -15,7 +15,7 @@ spec:
         name: gocd-server
     spec:
       containers:
-      - image: sennerholm/gocd-server:v17.9.0
+      - image: sennerholm/gocd-server:v17.9.1
         imagePullPolicy: Always
         name: gocd-server
         ports:
@@ -30,6 +30,8 @@ spec:
           mountPath: /godata
         - name: prod-go-data-db
           mountPath: /godata/db
+        - name: ssh-key
+          mountPath: /my-ssh-keys
       initContainers:
       - name: gocd-server-init
         image: busybox:glibc
@@ -47,3 +49,6 @@ spec:
           gcePersistentDisk:
             pdName: prod-go-data-db
             fsType: ext4
+        - name: ssh-key
+          secret:
+            secretName: ssh-key

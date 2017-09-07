@@ -8,3 +8,9 @@ output "auto_reg"
 {
 	  value = "95e0a630-c1ed-4c16-b636-2450b30ec18a"
 }
+
+// Ugly way of making the ssh key aviable for go-agent. 
+output "ssh_key_path"
+{
+	value = "${var.ssh_key_path}"
+}
