@@ -36,6 +36,20 @@ data "google_iam_policy" "srv_account_policy" {
   }
 }
 
+// Create secret with ssh keys
+resource "kubernetes_secret" "ssh_key" {
+  metadata {
+    name = "ssh-key"
+    namespace = "${kubernetes_namespace.gocd-agent.metadata.0.name}"
+  }
+
+  data {
+    id_rsa = "${file("${data.terraform_remote_state.gocd-server.ssh_key_path}/id_rsa")}"
+    id_rsa.pub  = "${file("${data.terraform_remote_state.gocd-server.ssh_key_path}/id_rsa.pub")}"
+  }
+}
+
+
 data "template_file" "k8s" {
   template = "${file("${path.module}/k8sgoagent.tpl")}"
 
@@ -46,13 +60,12 @@ data "template_file" "k8s" {
  
   }
 }
-// Begin with hardcoded values in goagent.yaml to get it up and running. 
-// TODO: Change to use a template instead
+// Begin with some hardcoded values in goagent.yaml to get it up and running. 
 module "kubernetes_goagent" {
   source        = "../kubernetes_beta"
   namespace   = "${kubernetes_namespace.gocd-agent.metadata.0.name}"
   k8sconf     = "${data.terraform_remote_state.gke.k8sconf}"
  // configuration = "${file("${path.module}/goagent.yaml")}"
   configuration = "${data.template_file.k8s.rendered}"
-  depends_on  = "${google_service_account.prod_go_agent.unique_id}"
+  depends_on  = "${google_service_account.prod_go_agent.unique_id} ${kubernetes_secret.ssh_key.generation}"
 }

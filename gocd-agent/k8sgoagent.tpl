@@ -11,7 +11,7 @@ spec:
         app: gocd-agent
     spec:
       containers:
-      - image: sennerholm/gocd-agent-gcloud:v17.8.0
+      - image: sennerholm/gocd-agent-gcloud:v17.9.2
         name: gocd-agent
         imagePullPolicy: Always
         securityContext:
@@ -32,6 +32,8 @@ spec:
           name: docker-sock
         - mountPath: "/var/run/secrets/cloud.google.com"
           name: "google-service-account"
+        - name: "ssh-key"
+          mountPath: "/my-ssh-keys"
       volumes:
       - name: "docker-command"
         hostPath:
@@ -45,3 +47,6 @@ spec:
           secretName: "google-service-account"
 # Converted from octal mode...
           defaultMode: 256
+      - name: "ssh-key"
+        secret:
+            secretName: "ssh-key"
