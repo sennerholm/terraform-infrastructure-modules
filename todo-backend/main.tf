@@ -38,21 +38,15 @@ resource "google_service_account" "todo_account" {
   provisioner "local-exec" {
        command = "gcloud beta iam service-accounts keys create --iam-account ${google_service_account.todo_account.email} service-account.json; kubectl --namespace ${kubernetes_namespace.todo_backend.metadata.0.name} create secret generic google-service-account --from-file service-account.json; echo rm service-account.json"
   }
-}
-
-resource "google_project_iam_policy" "project" {
-  project     = "${var.google_project}"
-  policy_data = "${data.google_iam_policy.srv_account_policy.policy_data}"
-}
-
-data "google_iam_policy" "srv_account_policy" {
-  binding {
-    role = "roles/datastore.user"
-
-    members = [
-      "serviceAccount:${google_service_account.todo_account.email}",
-    ]
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl --namespace ${kubernetes_namespace.todo_backend.metadata.0.name} delete secret google-service-account"
   }
+}
+
+resource "google_project_iam_member" "datastore" {
+  role    = "roles/datastore.user"
+  member  = "serviceAccount:${google_service_account.todo_account.email}"
 }
 // Create Deployment
 
