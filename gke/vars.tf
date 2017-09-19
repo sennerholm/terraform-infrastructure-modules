@@ -29,6 +29,6 @@ variable "gke_type_of_nodes" {
 
 variable "gke_version" {
   description = "Version of kubernetes to use",
-  default = "1.6.7"
+  default = "1.7.5"
 }
 
