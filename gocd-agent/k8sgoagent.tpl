@@ -11,7 +11,7 @@ spec:
         app: gocd-agent
     spec:
       containers:
-      - image: sennerholm/gocd-agent-gcloud:v17.9.3
+      - image: sennerholm/gocd-agent-gcloud:v17.9.4
         name: gocd-agent
         imagePullPolicy: Always
         securityContext:
@@ -30,6 +30,8 @@ spec:
           name: "docker-command"
         - mountPath: "/var/run/docker.sock"
           name: docker-sock
+        - mountPath: "/var/run/terragrunt.conf"
+          name: "terragrunt-conf"
         - mountPath: "/var/run/secrets/cloud.google.com"
           name: "google-service-account"
         - name: "ssh-key"
@@ -42,6 +44,9 @@ spec:
       - name: "docker-sock"
         hostPath:
           path: "/var/run/docker.sock"
+      - name: terragrunt-conf
+        configMap:
+          name: terragrunt-conf
       - name: "google-service-account"
         secret:
           secretName: "google-service-account"
