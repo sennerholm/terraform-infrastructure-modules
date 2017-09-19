@@ -18,14 +18,13 @@ data "terraform_remote_state" "gocd-server" {
   }
 }
 
-
 provider "kubernetes" {
-  host = "${data.terraform_remote_state.gke.endpoint}"
-  username = "${data.terraform_remote_state.gke.username}"
-  password = "${data.terraform_remote_state.gke.password}"
-  client_certificate = "${data.terraform_remote_state.gke.client_certificate}"
-  client_key = "${data.terraform_remote_state.gke.client_key}"
-  cluster_ca_certificate = "${data.terraform_remote_state.gke.ca_certificate}"
+  host = "${data.terraform_remote_state.gke.k8sconf.endpoint}"
+  username = "${data.terraform_remote_state.gke.k8sconf.username}"
+  password = "${data.terraform_remote_state.gke.k8sconf.password}"
+  client_certificate = "${data.terraform_remote_state.gke.k8sconf.client_certificate}"
+  client_key = "${data.terraform_remote_state.gke.k8sconf.client_key}"
+  cluster_ca_certificate = "${data.terraform_remote_state.gke.k8sconf.ca_certificate}"
 }
 
 provider "google" {
