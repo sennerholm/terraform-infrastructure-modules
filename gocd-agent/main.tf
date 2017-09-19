@@ -17,13 +17,14 @@ resource "google_service_account" "prod_go_agent" {
   // Run local-exec because terraform as 0.10 doesn't have a way to export it
   // https://github.com/terraform-providers/terraform-provider-google/pull/204
   provisioner "local-exec" {
-       command = "gcloud beta iam service-accounts keys create --iam-account ${google_service_account.prod_go_agent.email}         service-account.json; kubectl --namespace ${kubernetes_namespace.gocd-agent.metadata.0.name} create secret generic google-service-account --from-file service-account.json; echo rm service-account.json"
+       command = "gcloud --project ${var.google_project} container clusters get-credentials ${data.terraform_remote_state.gke.name}; gcloud beta iam service-accounts keys create --iam-account ${google_service_account.prod_go_agent.email}         service-account.json; kubectl --namespace ${kubernetes_namespace.gocd-agent.metadata.0.name} create secret generic google-service-account --from-file service-account.json; echo rm service-account.json"
   }
   provisioner "local-exec" {
     when    = "destroy"
-    command = "kubectl --namespace ${kubernetes_namespace.gocd-agent.metadata.0.name} delete secret google-service-account"
+    command = "gcloud --project ${var.google_project} container clusters get-credentials ${data.terraform_remote_state.gke.name}; kubectl --namespace ${kubernetes_namespace.gocd-agent.metadata.0.name} delete secret google-service-account || /bin/true"
   }
 }
+
 
 resource "google_project_iam_member" "editor" {
   role    = "roles/editor"
