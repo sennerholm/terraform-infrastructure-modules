@@ -19,21 +19,26 @@ resource "google_service_account" "prod_go_agent" {
   provisioner "local-exec" {
        command = "gcloud beta iam service-accounts keys create --iam-account ${google_service_account.prod_go_agent.email}         service-account.json; kubectl --namespace ${kubernetes_namespace.gocd-agent.metadata.0.name} create secret generic google-service-account --from-file service-account.json; echo rm service-account.json"
   }
-}
-
-resource "google_project_iam_policy" "project" {
-  project     = "${var.google_project}"
-  policy_data = "${data.google_iam_policy.srv_account_policy.policy_data}"
-}
-
-data "google_iam_policy" "srv_account_policy" {
-  binding {
-    role = "roles/editor"
-
-    members = [
-      "serviceAccount:${google_service_account.prod_go_agent.email}",
-    ]
+  provisioner "local-exec" {
+    when    = "destroy"
+    command = "kubectl --namespace ${kubernetes_namespace.gocd-agent.metadata.0.name} delete secret google-service-account"
   }
+}
+
+resource "google_project_iam_member" "editor" {
+  role    = "roles/editor"
+  member  = "serviceAccount:${google_service_account.prod_go_agent.email}"
+}
+
+
+resource "google_project_iam_member" "iam_admin" {
+  role    = "roles/resourcemanager.projectIamAdmin"
+  member  = "serviceAccount:${google_service_account.prod_go_agent.email}"
+}
+
+resource "google_project_iam_member" "storage" {
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:${google_service_account.prod_go_agent.email}"
 }
 
 // Create secret with ssh keys
@@ -49,7 +54,17 @@ resource "kubernetes_secret" "ssh_key" {
   }
 }
 
+// Create configmap containing terragrunt config to be runned in the container
+resource "kubernetes_config_map" "terragrunt_conf" {
+  metadata {
+    name = "terragrunt-conf"
+    namespace = "${kubernetes_namespace.gocd-agent.metadata.0.name}"
+  }
 
+  data {
+    terraform.tfvars = "${file("${var.terragrunt_config_path}/terraform.tfvars")}"
+  }
+}
 data "template_file" "k8s" {
   template = "${file("${path.module}/k8sgoagent.tpl")}"
 
@@ -57,7 +72,7 @@ data "template_file" "k8s" {
     google_project  = "${var.google_project}"
     go_url          = "${data.terraform_remote_state.gocd-server.url}"
     go_auto_reg     = "${data.terraform_remote_state.gocd-server.auto_reg}"
- 
+    service_account = "${google_service_account.prod_go_agent.email}"
   }
 }
 // Begin with some hardcoded values in goagent.yaml to get it up and running. 
