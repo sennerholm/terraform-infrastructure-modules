@@ -35,7 +35,7 @@ spec:
       initContainers:
       - name: gocd-server-init
         image: busybox:glibc
-        command: ['sh', '-c', 'if [ ! -f /godata/config/cruise-config.xml ]; then mkdir /godata/config; wget -O /godata/config/cruise-config.xml https://raw.githubusercontent.com/sennerholm/gce/master/go/bootstrap/cruise-config.xml; chown 1000:1000 /godata/config/cruise-config.xml; fi']
+        command: ['sh', '-c', 'if [ ! -f /godata/config/cruise-config.xml ]; then mkdir /godata/config; wget -O /godata/config/cruise-config.xml https://raw.githubusercontent.com/sennerholm/terraform-infrastructure-live/master/gce_account/europe-west1/prod/gocd-server/bootstrap/cruise-config.xml; chown 1000:1000 /godata/config/cruise-config.xml; fi']
         volumeMounts:
         - name: prod-go-data
           mountPath: /godata
