@@ -26,11 +26,11 @@ resource "google_service_account" "prod_go_agent" {
 }
 
 
-resource "google_project_iam_member" "editor" {
-  role    = "roles/editor"
+resource "google_project_iam_member" "owner" {
+  role    = "roles/owner"
   member  = "serviceAccount:${google_service_account.prod_go_agent.email}"
 }
-
+/* Make go agent owner of the project so it can create and enable everything needed.
 
 resource "google_project_iam_member" "iam_admin" {
   role    = "roles/resourcemanager.projectIamAdmin"
@@ -41,6 +41,7 @@ resource "google_project_iam_member" "storage" {
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.prod_go_agent.email}"
 }
+*/
 
 // Create secret with ssh keys
 resource "kubernetes_secret" "ssh_key" {
@@ -74,6 +75,7 @@ data "template_file" "k8s" {
     go_url          = "${data.terraform_remote_state.gocd-server.url}"
     go_auto_reg     = "${data.terraform_remote_state.gocd-server.auto_reg}"
     service_account = "${google_service_account.prod_go_agent.email}"
+    registry        = "${var.gcr_host}"
   }
 }
 // Begin with some hardcoded values in goagent.yaml to get it up and running. 

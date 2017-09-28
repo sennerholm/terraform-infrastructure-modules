@@ -25,6 +25,8 @@ spec:
           value: "/var/run/secrets/cloud.google.com/service-account.json"
         - name: "PROJECT_ID"
           value: "${google_project}"
+        - name: "REPOSITORY_PREFIX"
+          value: "${registry}/${google_project}"
         volumeMounts:
         - mountPath: "/usr/bin/docker"
           name: "docker-command"
