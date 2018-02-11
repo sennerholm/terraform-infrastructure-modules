@@ -2,7 +2,7 @@ data "terraform_remote_state" "gke" {
   backend = "gcs"
   config {
     bucket = "${var.google_project}"
-    path = "europe-west1/prod/gke/terraform.tfstate"    
+    path = "europe-west1/production/gke/terraform.tfstate"    
     project="${var.google_project}" 
     credentials = "${var.google_keyfile}"
   }
@@ -12,7 +12,7 @@ data "terraform_remote_state" "gocd-server" {
   backend = "gcs"
   config {
     bucket = "${var.google_project}"
-    path = "europe-west1/prod/gocd-server/terraform.tfstate"    
+    path = "europe-west1/production/gocd-server/terraform.tfstate"    
     project="${var.google_project}" 
     credentials = "${var.google_keyfile}"
   }
