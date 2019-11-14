@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "azure-vote-front" {
   }
 
   spec {
-    replicas = "1"
+    replicas = "${var.pod_scale}"
 
     selector {
       match_labels = {
@@ -108,7 +108,7 @@ resource "kubernetes_deployment" "azure-vote-back" {
   }
 
   spec {
-    replicas = "${var.pod_scale}"
+    replicas = "1"
 
     selector {
       match_labels = {
