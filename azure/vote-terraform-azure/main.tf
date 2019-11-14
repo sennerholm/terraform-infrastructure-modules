@@ -14,8 +14,12 @@ resource "kubernetes_namespace" "azure-vote" {
 
 # NOTE: the Name used for Redis needs to be globally unique
 
+resource "random_integer" "redis_suffix" {
+  min = 1
+  max = 50000
+}
 resource "azurerm_redis_cache" "backend" {
-  name                = "${var.full_resourcegroup_name}-${var.name}"
+  name                = "${var.full_resourcegroup_name}-${var.name}-${random_integer.redis_suffix.result}"
   location            = "${var.location}"
   resource_group_name = "${var.full_resourcegroup_name}"
   capacity            = 0
