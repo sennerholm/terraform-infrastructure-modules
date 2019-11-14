@@ -60,7 +60,7 @@ resource "kubernetes_deployment" "azure-vote-front" {
           }
           resources {
             requests {
-              cpu    = "500m"
+              cpu    = "100m"
               memory = "250Mi"
             }
           }
@@ -130,7 +130,7 @@ resource "kubernetes_deployment" "azure-vote-back" {
 
           resources {
             requests {
-              cpu    = "500m"
+              cpu    = "250m"
               memory = "250Mi"
             }
           }

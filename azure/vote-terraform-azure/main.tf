@@ -95,7 +95,7 @@ resource "kubernetes_deployment" "azure-vote-front" {
 
           resources {
             requests {
-              cpu    = "500m"
+              cpu    = "100m"
               memory = "250Mi"
             }
           }
