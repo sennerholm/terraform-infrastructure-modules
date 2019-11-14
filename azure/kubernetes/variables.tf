@@ -4,6 +4,13 @@ variable "client_secret" {}
 variable "agent_count" {
   default = 3
 }
+variable "agent_mincount" {
+  default = 2
+}
+
+variable "agent_maxcount" {
+  default = 6
+}
 
 variable "ssh_public_key" {
   default = "~/.ssh/id_rsa.pub"

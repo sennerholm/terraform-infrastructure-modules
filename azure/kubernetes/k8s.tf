@@ -15,10 +15,15 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   }
 
   agent_pool_profile {
-    name            = "agentpool"
-    count           = "${var.agent_count}"
-    vm_size         = "Standard_DS1_v2"
-    os_type         = "Linux"
+    name                = "autoscale"
+    type                = "VirtualMachineScaleSets"
+    enable_auto_scaling = "true"
+    min_count           = "${var.agent_mincount}"
+    max_count           = "${var.agent_maxcount}"
+    count               = "${var.agent_count}"
+    vm_size             = "Standard_DS1_v2" #Standard_D2s_v3
+    os_type             = "Linux"
+
     os_disk_size_gb = 30
   }
 
@@ -28,6 +33,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   }
 
   tags = {
-    Environment = "Development"
+    subscription = "${var.subscription_name}"
+
   }
 }
