@@ -12,6 +12,10 @@ variable "agent_maxcount" {
   default = 6
 }
 
+variable "agent_size" {
+  default = "Standard_DS1_v2"
+  #"Standard_DS1_v2" #Standard_D2s_v3
+}
 variable "ssh_public_key" {
   default = "~/.ssh/id_rsa.pub"
 }
