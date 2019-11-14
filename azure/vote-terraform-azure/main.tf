@@ -18,7 +18,7 @@ resource "azurerm_redis_cache" "backend" {
   name                = "${var.full_resourcegroup_name}-${var.name}"
   location            = "${var.location}"
   resource_group_name = "${var.full_resourcegroup_name}"
-  capacity            = 2
+  capacity            = 0
   family              = "C"
   sku_name            = "Basic"
   minimum_tls_version = "1.2"
