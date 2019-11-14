@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "azure-vote-front" {
   }
 
   spec {
-    replicas = "${var.pod_scale}"
+    replicas = "1"
 
     selector {
       match_labels = {
