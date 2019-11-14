@@ -108,7 +108,7 @@ resource "kubernetes_deployment" "azure-vote-back" {
   }
 
   spec {
-    replicas = 1
+    replicas = "${var.pod_scale}"
 
     selector {
       match_labels = {
