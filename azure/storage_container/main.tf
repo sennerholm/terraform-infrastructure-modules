@@ -6,7 +6,7 @@ resource "random_integer" "account_suffix" {
 }
 
 resource "azurerm_storage_account" "account" {
-  name                     = "account-${var.resource_name}"
+  name                     = "staccount${var.resource_name}${random_integer.account_suffix.result}"
   resource_group_name      = "${var.full_resourcegroup_name}"
   location                 = "${var.location}"
   account_tier             = "Standard"
@@ -19,7 +19,7 @@ resource "azurerm_storage_account" "account" {
 }
 
 resource "azurerm_storage_container" "container" {
-  name                  = "${var.full_resourcegroup_name}"
+  name                  = "stcont${var.resource_name}${random_integer.account_suffix.result}"
   storage_account_name  = "${azurerm_storage_account.account.name}"
   container_access_type = "private"
 }
