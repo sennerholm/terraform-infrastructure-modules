@@ -10,8 +10,13 @@ resource "random_string" "username" {
   length  = 16
   special = false
 }
+resource "random_integer" "gen_suffix" {
+  min = 1
+  max = 50000
+}
+
 resource "azurerm_sql_server" "server" {
-  name                         = "server-${var.resource_name}"
+  name                         = "server-${var.resource_name}${random_integer.gen_suffix.result}${var.location}${var.subscription_name}"
   resource_group_name          = "${var.full_resourcegroup_name}"
   location                     = "${var.location}"
   version                      = "12.0"
