@@ -28,13 +28,16 @@ output "kube_config" {
 
   value = "${azurerm_kubernetes_cluster.k8s.kube_config_raw}"
 }
+output "host" {
+  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
+}
 output "data_k8s" {
   sensitive = true
   value     = "${data.azurerm_kubernetes_cluster.k8s}"
 }
-output "data_vnet" {
-  value = "${data.azurerm_resources.vnet.resources}"
+output "data_subnet" {
+  value = "${data.azurerm_virtual_network.vnet.subnets}"
 }
-output "host" {
-  value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
+output "data_vnet" {
+  value = "${data.azurerm_resources.vnet.resources.0.id}"
 }

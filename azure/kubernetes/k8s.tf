@@ -46,3 +46,13 @@ data "azurerm_resources" "vnet" {
   resource_group_name = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
   type                = "Microsoft.Network/virtualNetworks"
 }
+#output "data_vnet" {
+#  value = "${data.azurerm_resources.vnet.resources}"
+#}
+
+data "azurerm_virtual_network" "vnet" {
+  name                = "${data.azurerm_resources.vnet.resources.0.name}"
+  resource_group_name = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
+}
+
+#subnets - The list of name of the subnets that are attached to this virtual network.
