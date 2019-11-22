@@ -37,3 +37,12 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
   }
 }
+
+data "azurerm_kubernetes_cluster" "k8s" {
+  name                = "${var.cluster_name}"
+  resource_group_name = "${var.k8s_resourcegroup_name}"
+}
+data "azurerm_resources" "vnet" {
+  resource_group_name = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
+  type                = "Microsoft.Network/virtualNetworks"
+}
