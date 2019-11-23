@@ -35,9 +35,12 @@ output "data_k8s" {
   sensitive = true
   value     = "${data.azurerm_kubernetes_cluster.k8s}"
 }
-output "data_subnet" {
-  value = "${data.azurerm_virtual_network.vnet.subnets}"
+output "data_vnets" {
+  value = "${data.azurerm_virtual_network.vnet}"
 }
-output "data_vnet" {
-  value = "${data.azurerm_resources.vnet.resources.0.id}"
+output "data_subnets" {
+  value = flatten(values(data.azurerm_virtual_network.vnet)[*].subnets.*)
+}
+output "data_subnet_ids" {
+  value = flatten(values(data.azurerm_subnet.subnet)[*].id)
 }

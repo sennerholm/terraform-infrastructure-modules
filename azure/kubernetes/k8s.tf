@@ -51,8 +51,16 @@ data "azurerm_resources" "vnet" {
 #}
 
 data "azurerm_virtual_network" "vnet" {
-  name                = "${data.azurerm_resources.vnet.resources.0.name}"
+  for_each            = toset(data.azurerm_resources.vnet.resources.*.name)
+  name                = each.value
   resource_group_name = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
 }
 
 #subnets - The list of name of the subnets that are attached to this virtual network.
+
+data "azurerm_subnet" "subnet" {
+  for_each             = toset(flatten(values(data.azurerm_virtual_network.vnet)[*].subnets.*))
+  name                 = each.value
+  virtual_network_name = "${data.azurerm_resources.vnet.resources.0.name}" # This will not work when we have multiple
+  resource_group_name  = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
+}
