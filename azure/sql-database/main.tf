@@ -37,5 +37,12 @@ resource "azurerm_sql_database" "db" {
     environment = "production"
   }
 }
+resource "azurerm_sql_virtual_network_rule" "src_access" {
+  for_each            = toset(var.src_subnets)
+  name                = "Clients${sha256(each.value)}"
+  resource_group_name = "${var.full_resourcegroup_name}"
+  server_name         = "${azurerm_sql_server.server.name}"
+  subnet_id           = each.value
+}
 # TODO
-# Add fw rule, and to right subnet, and thread detection
+# Add threat detection? 
