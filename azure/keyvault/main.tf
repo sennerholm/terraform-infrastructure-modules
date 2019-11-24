@@ -100,6 +100,7 @@ resource "azurerm_key_vault_access_policy" "app" {
   ]
 
   secret_permissions = [
+    "list",
   ]
 }
 
