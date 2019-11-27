@@ -32,16 +32,17 @@ resource "azurerm_key_vault" "vault" {
   resource_group_name = "${var.full_resourcegroup_name}"
   location            = "${var.location}"
 
-  enabled_for_disk_encryption = true
+  enabled_for_disk_encryption = false
   tenant_id                   = "${var.tenant_id}"
 
   sku_name = "standard"
 
   # Need to add network ACLS
-  #network_acls {
-  #  default_action = "Deny"
-  #  bypass         = "AzureServices"
-  #}
+  network_acls {
+    default_action             = "Deny"
+    bypass                     = "None"
+    virtual_network_subnet_ids = var.src_subnets
+  }
 }
 
 data "azuread_service_principal" "terra" {
