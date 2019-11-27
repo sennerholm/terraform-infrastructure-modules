@@ -1,5 +1,5 @@
 output "client_id" {
-  value = "${azuread_service_principal.sp.id}"
+  value = "${azuread_application.application.application_id}"
 }
 
 output "client_key" {
