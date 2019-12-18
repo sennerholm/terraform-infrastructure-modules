@@ -32,6 +32,7 @@ resource "azurerm_sql_database" "db" {
   resource_group_name = "${var.full_resourcegroup_name}"
   location            = "${var.location}"
   server_name         = "${azurerm_sql_server.server.name}"
+  edition             = "basic"
 
   tags = {
     environment = "production"
