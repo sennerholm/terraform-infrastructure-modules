@@ -31,16 +31,16 @@ output "kube_config" {
 output "host" {
   value = "${azurerm_kubernetes_cluster.k8s.kube_config.0.host}"
 }
-output "data_k8s" {
-  sensitive = true
-  value     = "${data.azurerm_kubernetes_cluster.k8s}"
-}
-output "data_vnets" {
-  value = "${data.azurerm_virtual_network.vnet}"
-}
-output "data_subnets" {
-  value = flatten(values(data.azurerm_virtual_network.vnet)[*].subnets.*)
-}
-output "data_subnet_ids" {
-  value = flatten(values(data.azurerm_subnet.subnet)[*].id)
-}
+#output "data_k8s" {
+#  sensitive = true
+#  value     = "${data.azurerm_kubernetes_cluster.k8s}"
+#}
+#output "data_vnets" {
+#  value = "${data.azurerm_virtual_network.vnet}"
+#}
+#output "data_subnets" {
+#  value = flatten(values(data.azurerm_virtual_network.vnet)[*].subnets.*)
+#}
+#output "data_subnet_ids" {
+#  value = flatten(values(data.azurerm_subnet.subnet)[*].id)
+#}

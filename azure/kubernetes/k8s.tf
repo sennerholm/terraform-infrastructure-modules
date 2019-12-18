@@ -38,8 +38,8 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   }
 }
 
-data "azurerm_kubernetes_cluster" "k8s" {
-  name                = "${var.cluster_name}"
+/* data "azurerm_kubernetes_cluster" "k8s" {
+  name                = "${azurerm_kubernetes_cluster.k8s.name}"
   resource_group_name = "${var.k8s_resourcegroup_name}"
 }
 data "azurerm_resources" "vnet" {
@@ -51,6 +51,7 @@ data "azurerm_resources" "vnet" {
 #}
 
 data "azurerm_virtual_network" "vnet" {
+  depends_on          = [ azurerm_kubernetes_cluster.k8s ]
   for_each            = toset(data.azurerm_resources.vnet.resources.*.name)
   name                = each.value
   resource_group_name = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
@@ -64,3 +65,4 @@ data "azurerm_subnet" "subnet" {
   virtual_network_name = "${data.azurerm_resources.vnet.resources.0.name}" # This will not work when we have multiple
   resource_group_name  = "${data.azurerm_kubernetes_cluster.k8s.node_resource_group}"
 }
+ */
