@@ -13,3 +13,7 @@ variable full_resourcegroup_name {}
 variable "subscription_name" {}
 variable location {}
 variable resourcegroup_name {}
+variable src_subnets {
+  type        = list(string)
+  description = "src subnet id's to access"
+}

@@ -17,6 +17,11 @@ resource "azurerm_storage_account" "account" {
     application    = "terragrunt"
     infrastructure = "true"
   }
+  network_rules {
+    default_action             = "Deny"
+    virtual_network_subnet_ids = var.src_subnets
+  }
+
 }
 
 #resource "azurerm_storage_container" "container" {
