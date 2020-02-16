@@ -36,6 +36,11 @@ resource "google_container_cluster" "main" {
       disable-legacy-endpoints = "true"
     }
   }
+  addons_config {
+    horizontal_pod_autoscaling {
+      disabled = false
+    }
+  }
 /*   master_auth {
     client_certificate_config {
       issue_client_certificate = true
