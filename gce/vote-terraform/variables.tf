@@ -12,6 +12,10 @@ variable kubernetes_client_key {}
 variable kubernetes_client_certificate {}
 variable kubernetes_cluster_ca_certificate {}
 
+variable "redis_host" {
+  description = "Host of the redis service"
+}
+
 variable "vote_title" {
   description = "Vote title"  
 }

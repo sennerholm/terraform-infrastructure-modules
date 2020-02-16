@@ -1,4 +1,4 @@
-/* resource "kubernetes_namespace" "vote" {
+resource "kubernetes_namespace" "vote" {
   metadata {
     annotations = {
       name = "example-annotation"
@@ -10,23 +10,17 @@
 
     name = lower(var.system)
   }
-} */
-
-resource "google_redis_instance" "main" {
-  name               = "${substr(lower("redis${var.region}${var.env}${var.system}${var.component}${var.append_name}"),0,39)}"
-  memory_size_gb = 1
-}
+} 
 
 resource "kubernetes_secret" "rediscache-secret" {
   metadata {
     name      = "rediscache-secret"
-    #namespace = "${kubernetes_namespace.vote.metadata.0.name}"
+    namespace = "${kubernetes_namespace.vote.metadata.0.name}"
 
   }
 
   data = {
-    REDIS          = "${google_redis_instance.main.host}"
-    REDIS_PORT     = "${google_redis_instance.main.port}"
+    REDIS          = "${var.redis_host}"
   }
 }
 
@@ -35,7 +29,7 @@ resource "kubernetes_deployment" "vote-front" {
   depends_on = [ kubernetes_secret.rediscache-secret ]
   metadata {
     name      = "vote-front"
-    #namespace = "${kubernetes_namespace.vote.metadata.0.name}"
+    namespace = "${kubernetes_namespace.vote.metadata.0.name}"
     labels = {
       app = "vote-front"
     }
@@ -104,7 +98,7 @@ resource "kubernetes_deployment" "vote-front" {
 resource "kubernetes_service" "vote-front" {
   metadata {
     name      = "vote-front"
-    #namespace = "${kubernetes_namespace.vote.metadata.0.name}"
+    namespace = "${kubernetes_namespace.vote.metadata.0.name}"
   }
   spec {
     selector = {
