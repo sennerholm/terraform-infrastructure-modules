@@ -1,5 +1,5 @@
 variable "pod_scale" {
-  default = 1
+  default = 2
 }
 
 variable name {
@@ -12,11 +12,15 @@ variable kubernetes_client_key {}
 variable kubernetes_client_certificate {}
 variable kubernetes_cluster_ca_certificate {}
 
-variable "vote1value" {
+variable "vote_title" {
+  description = "Vote title"  
+}
+
+variable "vote_alt1" {
   description = "First vote option"  
 }
 
-variable "vote2value" {
+variable "vote_alt2" {
   description = "Second vote option"  
 }
 
