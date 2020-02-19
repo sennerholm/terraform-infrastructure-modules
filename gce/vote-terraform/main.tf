@@ -15,12 +15,12 @@ resource "kubernetes_namespace" "vote" {
 resource "kubernetes_secret" "rediscache-secret" {
   metadata {
     name      = "rediscache-secret"
-    namespace = "${kubernetes_namespace.vote.metadata.0.name}"
+    namespace = kubernetes_namespace.vote.metadata.0.name
 
   }
 
   data = {
-    REDIS          = "${var.redis_host}"
+    REDIS          = var.redis_host
   }
 }
 
@@ -29,14 +29,14 @@ resource "kubernetes_deployment" "vote-front" {
   depends_on = [ kubernetes_secret.rediscache-secret ]
   metadata {
     name      = "vote-front"
-    namespace = "${kubernetes_namespace.vote.metadata.0.name}"
+    namespace = kubernetes_namespace.vote.metadata.0.name
     labels = {
       app = "vote-front"
     }
   }
 
   spec {
-    replicas = "${var.pod_scale}"
+    replicas = var.pod_scale
 
     selector {
       match_labels = {
@@ -63,15 +63,15 @@ resource "kubernetes_deployment" "vote-front" {
           }
           env {
             name  = "TITLE"
-            value = "${var.vote_title}"
+            value = var.vote_title
           }
           env {
             name  = "VOTE1VALUE"
-            value = "${var.vote_alt1}"
+            value = var.vote_alt1
           }
           env {
             name  = "VOTE2VALUE"
-            value = "${var.vote_alt2}"
+            value = var.vote_alt2
           }
 
           resources {
@@ -98,7 +98,7 @@ resource "kubernetes_deployment" "vote-front" {
 resource "kubernetes_service" "vote-front" {
   metadata {
     name      = "vote-front"
-    namespace = "${kubernetes_namespace.vote.metadata.0.name}"
+    namespace = kubernetes_namespace.vote.metadata.0.name
   }
   spec {
     selector = {
