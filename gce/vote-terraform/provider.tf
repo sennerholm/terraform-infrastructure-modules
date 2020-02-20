@@ -8,3 +8,8 @@ provider "kubernetes" {
 
   cluster_ca_certificate = base64decode(var.kubernetes_cluster_ca_certificate)
 }
+
+provider "cloudflare" {
+  # email pulled from $CLOUDFLARE_EMAIL
+  # token pulled from $CLOUDFLARE_TOKEN
+}

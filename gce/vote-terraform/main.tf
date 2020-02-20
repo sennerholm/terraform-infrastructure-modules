@@ -113,3 +113,17 @@ resource "kubernetes_service" "vote-front" {
     type = "LoadBalancer"
   }
 }
+data "cloudflare_zones" "main" {
+  filter {
+    name   = var.domain
+    status = "active"
+    paused = false
+  }
+}
+
+resource "cloudflare_record" "vote-front" {
+  zone_id = data.cloudflare_zones.main.zones[0].id
+  name    = "vote.${var.system}.${var.region}.${var.project}"
+  value   = kubernetes_service.vote-front.load_balancer_ingress[0].ip 
+  type    = "A"
+}

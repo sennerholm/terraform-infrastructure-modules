@@ -29,4 +29,6 @@ variable "vote_alt2" {
 }
 
 
-
+variable "domain" {
+  default = "mikan.net"
+}
