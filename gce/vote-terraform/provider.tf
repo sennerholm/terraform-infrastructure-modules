@@ -11,5 +11,5 @@ provider "kubernetes" {
 
 provider "cloudflare" {
   # email pulled from $CLOUDFLARE_EMAIL
-  # token pulled from $CLOUDFLARE_TOKEN
+  # token pulled from $CLOUDFLARE_API_TOKEN
 }
